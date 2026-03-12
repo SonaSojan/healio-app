@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Healio - Anonymous Support</title>
+</head>
+<body>
+
+<h3>Anonymous User ID: {{ user_id }}</h3>
+
+<h2>Anonymous Drug Withdrawal Support</h2>
+
+<!-- Symptom Submission -->
+<form method="POST">
+    <textarea name="symptoms" rows="4" cols="45"
+        placeholder="Describe your symptoms"></textarea>
+    <br><br>
+    <button type="submit">Submit Symptoms</button>
+</form>
+
+{% if emergency %}
+<h3 style="color:red;">⚠️ IMPORTANT NOTICE</h3>
+<p>
+Your symptoms indicate a medical emergency.  
+Please seek immediate professional medical help.
+</p>
+{% endif %}
+
+<hr>
+
+<!-- Message Doctor -->
+<h3>Message Doctor</h3>
+
+<form method="POST">
+    <textarea name="message" rows="4" cols="45"
+        placeholder="Write your message to the doctor"></textarea>
+    <br><br>
+    <button type="submit">Send Message</button>
+</form>
+
+<p><i>Please submit your symptoms before messaging the doctor.</i></p>
+
+<hr>
+
+<!-- User Messages -->
+<h3>Your Communication</h3>
+
+{% for msg in messages %}
+{% if msg.user_id == user_id %}
+<p><b>You:</b> {{ msg.message }}</p>
+<p><i>Doctor:</i> {{ msg.reply }}</p>
+<hr>
+{% endif %}
+{% endfor %}
+
+</body>
+</html>

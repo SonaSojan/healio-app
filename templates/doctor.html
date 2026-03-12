@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctor Dashboard</title>
+</head>
+<body>
+
+<h2>Doctor Dashboard</h2>
+
+{% for msg in messages %}
+<div style="border:1px solid black; padding:10px; margin-bottom:15px;">
+
+<p><b>User ID:</b> {{ msg.user_id }}</p>
+<p><b>Message:</b> {{ msg.message }}</p>
+
+<p><b>Severity:</b>
+<span style="color:
+{% if msg.severity == 'Severe' %}red
+{% elif msg.severity == 'Moderate' %}orange
+{% else %}green
+{% endif %};">
+{{ msg.severity }}
+</span>
+</p>
+
+<form method="POST">
+    <input type="hidden" name="msg_id" value="{{ msg.id }}">
+    <textarea name="reply" rows="3" cols="45"
+        placeholder="Doctor reply">{{ msg.reply }}</textarea>
+    <br><br>
+    <button type="submit">Send Reply</button>
+</form>
+
+</div>
+{% endfor %}
+
+</body>
+</html>
