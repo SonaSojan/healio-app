@@ -2,36 +2,56 @@
 <html>
 <head>
     <title>Doctor Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
 
 <h2>Doctor Dashboard</h2>
+<p>Review patient messages and respond.</p>
+
+<hr>
 
 {% for msg in messages %}
-<div style="border:1px solid black; padding:10px; margin-bottom:15px;">
 
-<p><b>User ID:</b> {{ msg.user_id }}</p>
-<p><b>Message:</b> {{ msg.message }}</p>
+<div class="message-box">
 
-<p><b>Severity:</b>
-<span style="color:
-{% if msg.severity == 'Severe' %}red
-{% elif msg.severity == 'Moderate' %}orange
-{% else %}green
-{% endif %};">
+<p><strong>User ID:</strong> {{ msg.user_id }}</p>
+
+<p><strong>Message:</strong> {{ msg.message }}</p>
+
+<p>
+<strong>Severity:</strong>
+<span class="
+{% if msg.severity == 'Severe' %}
+severity-severe
+{% elif msg.severity == 'Moderate' %}
+severity-moderate
+{% else %}
+severity-mild
+{% endif %}
+">
 {{ msg.severity }}
 </span>
 </p>
 
 <form method="POST">
-    <input type="hidden" name="msg_id" value="{{ msg.id }}">
-    <textarea name="reply" rows="3" cols="45"
-        placeholder="Doctor reply">{{ msg.reply }}</textarea>
-    <br><br>
-    <button type="submit">Send Reply</button>
+<input type="hidden" name="msg_id" value="{{ msg.id }}">
+
+<textarea name="reply" placeholder="Write your reply to the user..." rows="3" cols="50">
+{{ msg.reply }}
+</textarea>
+
+<br><br>
+
+<button type="submit">Send Reply</button>
+
 </form>
 
 </div>
+
+<hr>
+
 {% endfor %}
 
 </body>
