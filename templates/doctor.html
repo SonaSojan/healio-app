@@ -10,136 +10,93 @@
 
 <div class="page-wrapper">
 
-  <!-- ── Dashboard Header ───────────────────────────────────── -->
+  <!-- HEADER -->
   <div class="dash-header">
-    <div class="logo-wrap" style="margin-bottom:14px;">
-      <div class="logo-mark" style="background:rgba(255,255,255,.15); box-shadow:none;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"
-             stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
-        </svg>
-      </div>
-      <div>
-        <div class="logo-text" style="color:#fff; font-size:1.3rem;">Healio</div>
-        <div class="header-sub" style="color:rgba(255,255,255,.55);">Care Provider Portal</div>
-      </div>
-    </div>
-
-    <div class="dash-title">Doctor Dashboard</div>
-    <div class="dash-subtitle">Reviewing anonymous patient messages &amp; withdrawal reports</div>
-
-    <div class="dash-stats">
-      <span class="stat-pill">{{ messages|length }} Total Message{{ 's' if messages|length != 1 else '' }}</span>
-      <span class="stat-pill" style="background:rgba(217,48,37,.25); border-color:rgba(217,48,37,.3);">
-        {{ messages | selectattr('severity','equalto','severe') | list | length }} Severe
-      </span>
-      <span class="stat-pill" style="background:rgba(224,122,16,.2); border-color:rgba(224,122,16,.3);">
-        {{ messages | selectattr('severity','equalto','moderate') | list | length }} Moderate
-      </span>
-      <span class="stat-pill" style="background:rgba(14,165,160,.2); border-color:rgba(14,165,160,.3);">
-        {{ messages | selectattr('severity','equalto','mild') | list | length }} Mild
-      </span>
-    </div>
+    <h2>Doctor Dashboard</h2>
+    <p>Reviewing anonymous patient messages</p>
   </div>
 
-  <!-- ── Filter Bar ──────────────────────────────────────────── -->
+  <!-- FILTER -->
   <div class="filter-bar">
     <button class="filter-btn active" onclick="filterMessages('all', this)">All</button>
-    <button class="filter-btn" onclick="filterMessages('severe', this)">
-      🔴&nbsp; Severe
-    </button>
-    <button class="filter-btn" onclick="filterMessages('moderate', this)">
-      🟠&nbsp; Moderate
-    </button>
-    <button class="filter-btn" onclick="filterMessages('mild', this)">
-      🟢&nbsp; Mild
-    </button>
+    <button class="filter-btn" onclick="filterMessages('Severe', this)">🔴 Severe</button>
+    <button class="filter-btn" onclick="filterMessages('Moderate', this)">🟠 Moderate</button>
+    <button class="filter-btn" onclick="filterMessages('Mild', this)">🟢 Mild</button>
   </div>
 
-  <!-- ── Message Cards (newest first via Jinja reverse) ────────── -->
+  <!-- MESSAGES -->
   {% if messages %}
-    {% for msg in messages | reverse %}
-    <div class="msg-card {{ msg.severity }}" data-severity="{{ msg.severity }}">
+    {% for msg in messages %}
+    <div class="msg-card" data-severity="{{ msg.severity }}">
 
-      <!-- Meta row -->
+      <!-- USER + SEVERITY -->
       <div class="msg-meta">
-        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-          <span class="msg-uid">User {{ msg.user_id }}</span>
+        <span><strong>User:</strong> {{ msg.user_id }}</span>
 
-          {% if msg.severity == 'severe' %}
-            <span class="severity-badge badge-severe">Severe</span>
-          {% elif msg.severity == 'moderate' %}
-            <span class="severity-badge badge-moderate">Moderate</span>
+        <span>
+          <strong>Severity:</strong>
+          {% if msg.severity == 'Severe' %}
+            <span class="severity-severe">Severe</span>
+          {% elif msg.severity == 'Moderate' %}
+            <span class="severity-moderate">Moderate</span>
           {% else %}
-            <span class="severity-badge badge-mild">Mild</span>
+            <span class="severity-mild">Mild</span>
           {% endif %}
-        </div>
-        <span class="msg-time">{{ msg.timestamp }}</span>
+        </span>
       </div>
 
-      <!-- Message body -->
-      <div class="msg-body">{{ msg.message }}</div>
+      <!-- MESSAGE -->
+      <div class="msg-body">
+        {{ msg.message }}
+      </div>
 
-      <!-- Doctor reply form -->
-      <div class="reply-label">Reply to this patient</div>
-      <form action="/doctor_reply" method="POST">
-        <input type="hidden" name="user_id"    value="{{ msg.user_id }}" />
-        <input type="hidden" name="message_id" value="{{ msg.id }}" />
-        <textarea
-          name="reply"
-          class="small"
-          placeholder="Type your reply here…"
-          required
-        >{% if msg.doctor_reply %}{{ msg.doctor_reply }}{% endif %}</textarea>
+      <!-- REPLY FORM -->
+      <form method="POST">
+        <input type="hidden" name="msg_id" value="{{ msg.id }}">
 
-        <div class="btn-row">
-          <button type="submit" class="btn btn-primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13"/>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-            </svg>
-            Send Reply
-          </button>
-        </div>
+        <textarea name="reply" placeholder="Write reply..." required>
+{{ msg.reply }}
+        </textarea>
+
+        <br>
+
+        <!-- EMERGENCY FLAG -->
+        <label>
+          <input type="checkbox" name="emergency" {% if msg.emergency == 1 %}checked{% endif %}>
+          Mark as Emergency
+        </label>
+
+        <br><br>
+
+        <button class="btn btn-primary" type="submit">Send Reply</button>
       </form>
 
-    </div><!-- end .msg-card -->
+    </div>
     {% endfor %}
 
   {% else %}
-    <div class="empty-state">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
-           stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/>
-      </svg>
-      <p>No patient messages yet. Check back soon.</p>
-    </div>
+    <p>No messages yet.</p>
   {% endif %}
 
   <footer class="site-footer">
-    Healio Doctor Portal &nbsp;·&nbsp; All data is <strong>anonymised</strong> and encrypted.
-    <br /><a href="/logout">Log out</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a>
+    Healio Doctor Portal · All data anonymised
   </footer>
 
-</div><!-- end .page-wrapper -->
+</div>
 
 <script>
-  function filterMessages(severity, btn) {
-    // Update active button
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+function filterMessages(severity, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
 
-    // Show / hide cards
-    document.querySelectorAll('.msg-card').forEach(card => {
-      if (severity === 'all' || card.dataset.severity === severity) {
-        card.style.display = '';
-      } else {
-        card.style.display = 'none';
-      }
-    });
-  }
+  document.querySelectorAll('.msg-card').forEach(card => {
+    if (severity === 'all' || card.dataset.severity === severity) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
 </script>
 
 </body>

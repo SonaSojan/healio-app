@@ -6,30 +6,24 @@ import random
 app = Flask(__name__)
 app.secret_key = "healio_secret_key"
 
-create_table()   # Create database table on startup
+create_table()
 
 @app.route("/", methods=["GET", "POST"])
 def home():
     if "user_id" not in session:
         session["user_id"] = "USER-" + str(random.randint(1000, 9999))
 
-    emergency = False
-
     if request.method == "POST":
+        symptoms = request.form.get("symptoms")
+        message = request.form.get("message")
 
-        # Symptoms submission
-        if "symptoms" in request.form:
-            severity = detect_severity(request.form["symptoms"])
-            session["last_severity"] = severity
-            if severity == "Severe":
-                emergency = True
+        if symptoms and message:
+            severity = detect_severity(symptoms)
 
-        # Message submission
-        if "message" in request.form and "last_severity" in session:
             conn = get_db_connection()
             conn.execute(
-                "INSERT INTO messages (user_id, message, severity, reply) VALUES (?, ?, ?, ?)",
-                (session["user_id"], request.form["message"], session["last_severity"], "")
+                "INSERT INTO messages (user_id, message, severity, reply, emergency) VALUES (?, ?, ?, ?, ?)",
+                (session["user_id"], message, severity, "", 0)
             )
             conn.commit()
             conn.close()
@@ -38,31 +32,47 @@ def home():
     messages = conn.execute("SELECT * FROM messages").fetchall()
     conn.close()
 
+    # check emergency for this user
+    emergency = any(
+        msg["emergency"] == 1 and msg["user_id"] == session["user_id"]
+        for msg in messages
+    )
+
     return render_template(
         "index.html",
         user_id=session["user_id"],
-        emergency=emergency,
-        messages=messages
+        messages=messages,
+        emergency=emergency
     )
+
 
 @app.route("/doctor", methods=["GET", "POST"])
 def doctor():
     conn = get_db_connection()
 
     if request.method == "POST":
+        emergency_flag = 1 if "emergency" in request.form else 0
+
         conn.execute(
-            "UPDATE messages SET reply = ? WHERE id = ?",
-            (request.form["reply"], request.form["msg_id"])
+            "UPDATE messages SET reply = ?, emergency = ? WHERE id = ?",
+            (request.form["reply"], emergency_flag, request.form["msg_id"])
         )
         conn.commit()
 
-    messages = conn.execute("SELECT * FROM messages ORDER BY id DESC").fetchall()
+    messages = conn.execute("""
+    SELECT * FROM messages
+    ORDER BY
+        CASE severity
+            WHEN 'Severe' THEN 1
+            WHEN 'Moderate' THEN 2
+            ELSE 3
+        END
+    """).fetchall()
+
     conn.close()
 
     return render_template("doctor.html", messages=messages)
 
-import os
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(debug=True)

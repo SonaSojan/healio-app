@@ -13,7 +13,8 @@ def create_table():
             user_id TEXT,
             message TEXT,
             severity TEXT,
-            reply TEXT
+            reply TEXT,
+            emergency INTEGER DEFAULT 0
         )
     """)
     conn.commit()
