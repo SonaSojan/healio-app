@@ -1,12 +1,17 @@
 from flask import Flask, render_template, request, session
 from severity import detect_severity
 from database import get_db_connection, create_table
+from whitenoise import WhiteNoise
 import random
+import os
 
 app = Flask(__name__)
 app.secret_key = "healio_secret_key"
 
+app.wsgi_app = WhiteNoise(app.wsgi_app, root="static")
+
 create_table()
+
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -32,7 +37,6 @@ def home():
     messages = conn.execute("SELECT * FROM messages").fetchall()
     conn.close()
 
-    # check emergency for this user
     emergency = any(
         msg["emergency"] == 1 and msg["user_id"] == session["user_id"]
         for msg in messages
@@ -73,6 +77,5 @@ def doctor():
 
     return render_template("doctor.html", messages=messages)
 
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
