@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Doctor Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="login-container">
+
+  <h2>💙 Healio</h2>
+  <p class="subtitle">Doctor Portal</p>
+
+  <div class="login-card">
+
+    <h3>Doctor Login</h3>
+    <p class="desc">Access the secure dashboard to manage patient cases</p>
+
+    <div class="demo-box">
+      <strong>Demo Credentials:</strong><br>
+      Username: doctor <br>
+      Password: healio2026
+    </div>
+
+    <form method="POST">
+
+      <label>Username</label>
+      <input type="text" name="username" placeholder="Enter your username" required>
+
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Enter your password" required>
+
+      <button class="btn primary">Sign In</button>
+
+    </form>
+
+    <p class="secure-text">🔒 This is a secure, encrypted connection.</p>
+
+    <a href="/home" class="back">← Back to Home</a>
+
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,20 +1,27 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 from severity import detect_severity
 from database import get_db_connection, create_table
 from whitenoise import WhiteNoise
 import random
-import os
 
 app = Flask(__name__)
 app.secret_key = "healio_secret_key"
 
+# Serve static files on Render
 app.wsgi_app = WhiteNoise(app.wsgi_app, root="static")
 
 create_table()
 
+# 🟦 LANDING PAGE (Figma UI)
+@app.route("/home")
+def landing():
+    return render_template("home.html")
 
-@app.route("/", methods=["GET", "POST"])
-def home():
+
+# 🟦 USER APP (your main logic moved here)
+@app.route("/app", methods=["GET", "POST"])
+def user_app():
+
     if "user_id" not in session:
         session["user_id"] = "USER-" + str(random.randint(1000, 9999))
 
@@ -50,8 +57,19 @@ def home():
     )
 
 
+# 🟦 DOCTOR LOGIN PAGE
+@app.route("/doctor-login", methods=["GET", "POST"])
+def doctor_login():
+    if request.method == "POST":
+        if request.form["username"] == "doctor" and request.form["password"] == "healio2026":
+            return redirect("/doctor")
+    return render_template("doctor_login.html")
+
+
+# 🟦 DOCTOR DASHBOARD
 @app.route("/doctor", methods=["GET", "POST"])
 def doctor():
+
     conn = get_db_connection()
 
     if request.method == "POST":
@@ -76,6 +94,13 @@ def doctor():
     conn.close()
 
     return render_template("doctor.html", messages=messages)
+
+
+# 🟦 DEFAULT ROUTE → LANDING PAGE
+@app.route("/")
+def default():
+    return redirect("/home")
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
