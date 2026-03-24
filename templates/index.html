@@ -1,105 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Healio – Anonymous Support</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <title>Healio User</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
 
-<div class="page-wrapper">
+<!-- HEADER -->
+<div class="topbar">
+  <div class="logo">💙 Healio</div>
+  <div class="userid">👤 {{ user_id }}</div>
+</div>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="logo-wrap">
-      <div class="logo-mark">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"
-             stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Z"/>
-          <path d="M12 8v4l3 3"/>
-        </svg>
-      </div>
-      <div>
-        <div class="logo-text">Heali<span>o</span></div>
-        <div class="header-sub">Anonymous Support</div>
-      </div>
-    </div>
+<!-- FORM CARD -->
+<div class="card main-card">
 
-    <div class="user-id-badge">
-      <span class="dot"></span>
-      <span>ID:&nbsp;<strong>{{ user_id }}</strong></span>
-    </div>
-  </header>
+  <h2>📨 Report Symptoms & Send Message</h2>
 
-  <!-- SINGLE COMBINED FORM -->
-  <div class="card">
-    <div class="section-title">Share Your Condition</div>
+  <form method="POST">
 
-    <form method="POST">
+    <label>Describe your symptoms</label>
+    <textarea name="symptoms" placeholder="e.g., headache, nausea, anxiety..." required></textarea>
 
-      <textarea
-        name="symptoms"
-        class="large"
-        placeholder="Describe your symptoms..."
-        required
-      ></textarea>
+    <label>Additional message (optional)</label>
+    <textarea name="message" placeholder="Any additional information you'd like to share..."></textarea>
 
-      <br><br>
+    <button class="btn-primary">Submit Report</button>
 
-      <textarea
-        name="message"
-        class="small"
-        placeholder="Message to doctor..."
-        required
-      ></textarea>
+  </form>
 
-      <br><br>
+</div>
 
-      <button type="submit" class="btn btn-primary">Submit</button>
+<!-- CHAT -->
+<div class="card chat-card">
 
-    </form>
-  </div>
+  <h2>Communication History</h2>
 
-  <!-- EMERGENCY ALERT (ONLY DOCTOR TRIGGERED) -->
-  {% if emergency %}
-  <div class="card alert-box">
-    <h3>🚨 Emergency Alert</h3>
-    <p>Your doctor has marked your case as critical. Please seek immediate medical help.</p>
-  </div>
-  {% endif %}
+  <div class="chat-box">
 
-  <!-- COMMUNICATION HISTORY -->
-  <div class="card">
-    <div class="section-title">Communication History</div>
+    {% for msg in messages %}
+      {% if msg.user_id == user_id %}
 
-    <div class="chat-wrap">
-
-      {% for msg in messages %}
-        {% if msg.user_id == user_id %}
-
-          <div class="chat-msg user">
-            <div class="chat-label">You</div>
-            <div class="chat-bubble">{{ msg.message }}</div>
+        <!-- USER MESSAGE -->
+        <div class="chat user">
+          <div class="bubble user-bubble">
+            <strong>You</strong><br>
+            {{ msg.message }}
           </div>
+        </div>
 
-          {% if msg.reply %}
-          <div class="chat-msg doctor">
-            <div class="chat-label">🩺 Doctor</div>
-            <div class="chat-bubble">{{ msg.reply }}</div>
+        <!-- DOCTOR MESSAGE -->
+        {% if msg.reply %}
+        <div class="chat doctor">
+          <div class="bubble doctor-bubble">
+            <strong>Doctor</strong><br>
+            {{ msg.reply }}
           </div>
-          {% endif %}
-
+        </div>
         {% endif %}
-      {% endfor %}
 
-    </div>
+      {% endif %}
+    {% endfor %}
+
   </div>
-
-  <footer class="site-footer">
-    Healio — Anonymous Drug Withdrawal Support  
-    <br>Your identity is never disclosed.
-  </footer>
 
 </div>
 

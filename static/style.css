@@ -1,110 +1,71 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #f2f5f8;
-  margin: 0;
-}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Healio User</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 
-/* HERO */
+<body>
 
-.hero {
-  text-align: center;
-  margin-top: 80px;
-}
+<!-- HEADER -->
+<div class="topbar">
+  <div class="logo">💙 Healio</div>
+  <div class="userid">👤 {{ user_id }}</div>
+</div>
 
-.logo {
-  font-size: 40px;
-}
+<!-- FORM CARD -->
+<div class="card main-card">
 
-.subtitle {
-  color: #6b7c93;
-  font-size: 18px;
-}
+  <h2>📨 Report Symptoms & Send Message</h2>
 
-.desc {
-  max-width: 600px;
-  margin: 10px auto;
-  color: #6b7c93;
-}
+  <form method="POST">
 
-/* CARDS */
+    <label>Describe your symptoms</label>
+    <textarea name="symptoms" placeholder="e.g., headache, nausea, anxiety..." required></textarea>
 
-.cards {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 40px;
-}
+    <label>Additional message (optional)</label>
+    <textarea name="message" placeholder="Any additional information you'd like to share..."></textarea>
 
-.card {
-  background: white;
-  padding: 20px;
-  width: 260px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
+    <button class="btn-primary">Submit Report</button>
 
-/* BUTTONS */
+  </form>
 
-.buttons {
-  margin-top: 40px;
-}
+</div>
 
-.btn {
-  padding: 12px 25px;
-  border-radius: 10px;
-  text-decoration: none;
-  margin: 10px;
-  display: inline-block;
-}
+<!-- CHAT -->
+<div class="card chat-card">
 
-.primary {
-  background: #2ea6d7;
-  color: white;
-}
+  <h2>Communication History</h2>
 
-.secondary {
-  border: 1px solid #ccc;
-  color: black;
-}
+  <div class="chat-box">
 
-/* LOGIN */
+    {% for msg in messages %}
+      {% if msg.user_id == user_id %}
 
-.login-container {
-  text-align: center;
-  margin-top: 60px;
-}
+        <!-- USER MESSAGE -->
+        <div class="chat user">
+          <div class="bubble user-bubble">
+            <strong>You</strong><br>
+            {{ msg.message }}
+          </div>
+        </div>
 
-.login-card {
-  background: white;
-  width: 400px;
-  margin: auto;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-}
+        <!-- DOCTOR MESSAGE -->
+        {% if msg.reply %}
+        <div class="chat doctor">
+          <div class="bubble doctor-bubble">
+            <strong>Doctor</strong><br>
+            {{ msg.reply }}
+          </div>
+        </div>
+        {% endif %}
 
-.demo-box {
-  background: #e8f3fa;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  text-align: left;
-}
+      {% endif %}
+    {% endfor %}
 
-input {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
+  </div>
 
-.secure-text {
-  color: gray;
-  font-size: 12px;
-}
+</div>
 
-.back {
-  display: block;
-  margin-top: 15px;
-}
+</body>
+</html>
