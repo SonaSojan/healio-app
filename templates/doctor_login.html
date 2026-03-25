@@ -1,26 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Doctor Login</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-<div class="login-container">
+<div class="login-wrapper">
 
-  <h2>💙 Healio</h2>
-  <p class="subtitle">Doctor Portal</p>
+  <!-- Logo -->
+  <div class="login-header">
+    <h1>💙 Healio</h1>
+    <p>Doctor Portal</p>
+  </div>
 
+  <!-- Card -->
   <div class="login-card">
 
-    <h3>Doctor Login</h3>
+    <h2>Doctor Login</h2>
     <p class="desc">Access the secure dashboard to manage patient cases</p>
 
+    <!-- Demo Credentials -->
     <div class="demo-box">
-      <strong>Demo Credentials:</strong><br>
-      Username: doctor <br>
-      Password: healio2026
+      <b>Demo Credentials:</b><br>
+      Username: <span>doctor</span><br>
+      Password: <span>healio2026</span>
     </div>
 
     <form method="POST">
@@ -31,7 +37,7 @@
       <label>Password</label>
       <input type="password" name="password" placeholder="Enter your password" required>
 
-      <button class="btn primary">Sign In</button>
+      <button class="btn-primary">Sign In</button>
 
     </form>
 

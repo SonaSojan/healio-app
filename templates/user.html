@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="header">
+  <div>←</div>
+  <div class="logo">Healio</div>
+  <div class="user-badge">{{ user_id }}</div>
+</div>
+
+<div class="form-card">
+  <h3>Report Symptoms & Send Message</h3>
+
+  <form method="POST">
+    <label>Symptoms</label>
+    <textarea name="symptoms"></textarea>
+
+    <label>Message</label>
+    <textarea name="message"></textarea>
+
+    <button class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+<div class="chat-box">
+  {% for msg in messages %}
+    <div class="msg user-msg">{{ msg["message"] }}</div>
+    {% if msg["reply"] %}
+      <div class="msg doc-msg">{{ msg["reply"] }}</div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+</body>
+</html>

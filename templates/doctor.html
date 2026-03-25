@@ -1,103 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Healio – Doctor Dashboard</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<div class="page-wrapper">
-
-  <!-- HEADER -->
-  <div class="dash-header">
-    <h2>Doctor Dashboard</h2>
-    <p>Reviewing anonymous patient messages</p>
-  </div>
-
-  <!-- FILTER -->
-  <div class="filter-bar">
-    <button class="filter-btn active" onclick="filterMessages('all', this)">All</button>
-    <button class="filter-btn" onclick="filterMessages('Severe', this)">🔴 Severe</button>
-    <button class="filter-btn" onclick="filterMessages('Moderate', this)">🟠 Moderate</button>
-    <button class="filter-btn" onclick="filterMessages('Mild', this)">🟢 Mild</button>
-  </div>
-
-  <!-- MESSAGES -->
-  {% if messages %}
-    {% for msg in messages %}
-    <div class="msg-card" data-severity="{{ msg.severity }}">
-
-      <!-- USER + SEVERITY -->
-      <div class="msg-meta">
-        <span><strong>User:</strong> {{ msg.user_id }}</span>
-
-        <span>
-          <strong>Severity:</strong>
-          {% if msg.severity == 'Severe' %}
-            <span class="severity-severe">Severe</span>
-          {% elif msg.severity == 'Moderate' %}
-            <span class="severity-moderate">Moderate</span>
-          {% else %}
-            <span class="severity-mild">Mild</span>
-          {% endif %}
-        </span>
-      </div>
-
-      <!-- MESSAGE -->
-      <div class="msg-body">
-        {{ msg.message }}
-      </div>
-
-      <!-- REPLY FORM -->
-      <form method="POST">
-        <input type="hidden" name="msg_id" value="{{ msg.id }}">
-
-        <textarea name="reply" placeholder="Write reply..." required>
-{{ msg.reply }}
-        </textarea>
-
-        <br>
-
-        <!-- EMERGENCY FLAG -->
-        <label>
-          <input type="checkbox" name="emergency" {% if msg.emergency == 1 %}checked{% endif %}>
-          Mark as Emergency
-        </label>
-
-        <br><br>
-
-        <button class="btn btn-primary" type="submit">Send Reply</button>
-      </form>
-
-    </div>
-    {% endfor %}
-
-  {% else %}
-    <p>No messages yet.</p>
-  {% endif %}
-
-  <footer class="site-footer">
-    Healio Doctor Portal · All data anonymised
-  </footer>
-
+<div class="header">
+  <div>←</div>
+  <div class="logo">Doctor Dashboard</div>
 </div>
 
-<script>
-function filterMessages(severity, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+{% for msg in messages %}
+<div class="form-card">
 
-  document.querySelectorAll('.msg-card').forEach(card => {
-    if (severity === 'all' || card.dataset.severity === severity) {
-      card.style.display = '';
-    } else {
-      card.style.display = 'none';
-    }
-  });
-}
-</script>
+  <b>{{ msg["user_id"] }}</b><br><br>
+  {{ msg["message"] }}<br><br>
+
+  <form method="POST">
+    <input type="hidden" name="msg_id" value="{{ msg['id'] }}">
+    <textarea name="reply"></textarea>
+
+    <label>
+      <input type="checkbox" name="emergency"> Mark as Emergency
+    </label><br><br>
+
+    <button class="btn btn-primary">Send Reply</button>
+  </form>
+
+</div>
+{% endfor %}
 
 </body>
 </html>

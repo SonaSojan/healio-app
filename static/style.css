@@ -1,71 +1,213 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Healio User</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #eef3f7;
+  margin: 0;
+  color: #2c3e50;
+}
 
-<body>
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
 
-<!-- HEADER -->
-<div class="topbar">
-  <div class="logo">💙 Healio</div>
-  <div class="userid">👤 {{ user_id }}</div>
-</div>
+.logo {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1d3557;
+}
 
-<!-- FORM CARD -->
-<div class="card main-card">
+.user-badge {
+  background: #f1f3f6;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
 
-  <h2>📨 Report Symptoms & Send Message</h2>
+/* Center Home */
+.center {
+  text-align: center;
+  margin-top: 80px;
+}
 
-  <form method="POST">
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin: 40px 0;
+}
 
-    <label>Describe your symptoms</label>
-    <textarea name="symptoms" placeholder="e.g., headache, nausea, anxiety..." required></textarea>
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  width: 260px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}
 
-    <label>Additional message (optional)</label>
-    <textarea name="message" placeholder="Any additional information you'd like to share..."></textarea>
+/* Buttons */
+.btn {
+  padding: 12px 24px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
 
-    <button class="btn-primary">Submit Report</button>
+.btn-primary {
+  background: #1ea4d9;
+  color: white;
+}
 
-  </form>
+.btn-secondary {
+  background: #f1f3f6;
+}
 
-</div>
+/* Form Card */
+.form-card {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  width: 70%;
+  margin: 40px auto;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}
 
-<!-- CHAT -->
-<div class="card chat-card">
+textarea {
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
 
-  <h2>Communication History</h2>
+/* Chat */
+.chat-box {
+  width: 70%;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+}
 
-  <div class="chat-box">
+.msg {
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+}
 
-    {% for msg in messages %}
-      {% if msg.user_id == user_id %}
+.user-msg {
+  background: #1ea4d9;
+  color: white;
+  text-align: right;
+}
 
-        <!-- USER MESSAGE -->
-        <div class="chat user">
-          <div class="bubble user-bubble">
-            <strong>You</strong><br>
-            {{ msg.message }}
-          </div>
-        </div>
+.doc-msg {
+  background: #eaeef2;
+}
+/* LOGIN PAGE */
 
-        <!-- DOCTOR MESSAGE -->
-        {% if msg.reply %}
-        <div class="chat doctor">
-          <div class="bubble doctor-bubble">
-            <strong>Doctor</strong><br>
-            {{ msg.reply }}
-          </div>
-        </div>
-        {% endif %}
+.login-wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to bottom, #eef3f7, #dde7ef);
+}
 
-      {% endif %}
-    {% endfor %}
+.login-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-  </div>
+.login-header h1 {
+  font-size: 32px;
+  margin-bottom: 5px;
+}
 
-</div>
+.login-header p {
+  color: #6b7c93;
+}
 
-</body>
-</html>
+.login-card {
+  background: white;
+  padding: 30px;
+  width: 350px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  text-align: left;
+}
+
+.login-card h2 {
+  margin-bottom: 5px;
+}
+
+.desc {
+  font-size: 14px;
+  color: #6b7c93;
+  margin-bottom: 20px;
+}
+
+.demo-box {
+  background: #e8f2ff;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.demo-box span {
+  font-family: monospace;
+}
+
+.login-card label {
+  font-size: 14px;
+  margin-top: 10px;
+  display: block;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: #1ea4d9;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #0f8ec2;
+}
+
+.secure-text {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 15px;
+  color: #6b7c93;
+}
+
+.back {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  color: #1ea4d9;
+  text-decoration: none;
+}

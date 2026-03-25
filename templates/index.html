@@ -1,70 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Healio User</title>
+  <title>Healio</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
 
-<!-- HEADER -->
-<div class="topbar">
-  <div class="logo">💙 Healio</div>
-  <div class="userid">👤 {{ user_id }}</div>
-</div>
+<div class="center">
+  <h1>💙 Healio</h1>
+  <h3>Anonymous Drug Withdrawal Support</h3>
 
-<!-- FORM CARD -->
-<div class="card main-card">
+  <p>A safe and confidential platform to communicate with doctors.</p>
 
-  <h2>📨 Report Symptoms & Send Message</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>100% Anonymous</h3>
+      <p>Your identity is protected.</p>
+    </div>
 
-  <form method="POST">
+    <div class="card">
+      <h3>Direct Support</h3>
+      <p>Connect with doctors.</p>
+    </div>
 
-    <label>Describe your symptoms</label>
-    <textarea name="symptoms" placeholder="e.g., headache, nausea, anxiety..." required></textarea>
-
-    <label>Additional message (optional)</label>
-    <textarea name="message" placeholder="Any additional information you'd like to share..."></textarea>
-
-    <button class="btn-primary">Submit Report</button>
-
-  </form>
-
-</div>
-
-<!-- CHAT -->
-<div class="card chat-card">
-
-  <h2>Communication History</h2>
-
-  <div class="chat-box">
-
-    {% for msg in messages %}
-      {% if msg.user_id == user_id %}
-
-        <!-- USER MESSAGE -->
-        <div class="chat user">
-          <div class="bubble user-bubble">
-            <strong>You</strong><br>
-            {{ msg.message }}
-          </div>
-        </div>
-
-        <!-- DOCTOR MESSAGE -->
-        {% if msg.reply %}
-        <div class="chat doctor">
-          <div class="bubble doctor-bubble">
-            <strong>Doctor</strong><br>
-            {{ msg.reply }}
-          </div>
-        </div>
-        {% endif %}
-
-      {% endif %}
-    {% endfor %}
-
+    <div class="card">
+      <h3>Safe Space</h3>
+      <p>No judgment.</p>
+    </div>
   </div>
 
+  <a href="/user"><button class="btn btn-primary">Enter as User</button></a>
+  <a href="/doctor"><button class="btn btn-secondary">Doctor Dashboard</button></a>
 </div>
 
 </body>
