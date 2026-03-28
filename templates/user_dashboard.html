@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="header">
+  <h2>User ID: {{ user_id }}</h2>
+</div>
+
+<div class="container">
+
+  {% for msg in messages %}
+    {% if msg.emergency == 1 and msg.user_id == user_id %}
+      <div class="emergency">
+        🚨 Doctor marked this as emergency. Seek medical help!
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  <div class="card">
+    <h3>Submit Symptoms</h3>
+    <form method="POST">
+      <textarea name="symptoms" placeholder="Symptoms"></textarea>
+      <textarea name="message" placeholder="Message"></textarea>
+      <button>Submit</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>Chat</h3>
+
+    {% for msg in messages %}
+      {% if msg.user_id == user_id %}
+        <div class="chat-user">
+          {{ msg.message }}
+        </div>
+
+        {% if msg.reply %}
+        <div class="chat-doctor">
+          {{ msg.reply }}
+        </div>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+  </div>
+
+</div>
+
+</body>
+</html>

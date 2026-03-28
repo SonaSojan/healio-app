@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Doctor Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="header">
+  <h2>Doctor Dashboard</h2>
+</div>
+
+<div class="container">
+
+  {% for msg in messages %}
+  <div class="card">
+    <h4>{{ msg.user_id }} ({{ msg.severity }})</h4>
+    <p>{{ msg.message }}</p>
+
+    <form method="POST">
+      <input type="hidden" name="msg_id" value="{{ msg.id }}">
+      <textarea name="reply"></textarea><br>
+      <label><input type="checkbox" name="emergency"> Mark Emergency</label><br>
+      <button>Send</button>
+    </form>
+
+  </div>
+  {% endfor %}
+
+</div>
+
+</body>
+</html>

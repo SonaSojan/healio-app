@@ -8,14 +8,13 @@ def get_db_connection():
 def create_table():
     conn = get_db_connection()
     conn.execute("""
-        CREATE TABLE IF NOT EXISTS messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id TEXT,
-            message TEXT,
-            severity TEXT,
-            reply TEXT,
-            emergency INTEGER DEFAULT 0
-        )
+    CREATE TABLE IF NOT EXISTS messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT,
+        message TEXT,
+        severity TEXT,
+        reply TEXT,
+        emergency INTEGER
+    )
     """)
-    conn.commit()
     conn.close()

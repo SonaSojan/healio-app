@@ -1,57 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Healio – Anonymous Support</title>
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>Healio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
 
-<div class="home-container">
+<div class="header">
+  <h1>💙 Healio</h1>
+  <p>Anonymous Drug Withdrawal Support</p>
+</div>
 
-    <!-- Logo -->
-    <div class="logo-section">
-        <h1 class="logo">💙 Healio</h1>
-        <h2 class="subtitle">Anonymous Drug Withdrawal Support</h2>
-        <p class="description">
-            A safe and confidential platform where you can report withdrawal symptoms and
-            communicate with verified doctors without revealing your identity.
-        </p>
-    </div>
+<div class="container">
+  <div class="card">
+    <h2>Welcome</h2>
+    <p>Get help anonymously from certified doctors.</p>
 
-    <!-- Feature Cards -->
-    <div class="card-container">
-
-        <div class="card">
-            <h3>🛡️ 100% Anonymous</h3>
-            <p>Your identity is protected. Communicate using a secure anonymous ID.</p>
-        </div>
-
-        <div class="card">
-            <h3>💬 Direct Support</h3>
-            <p>Connect with verified healthcare professionals who understand your journey.</p>
-        </div>
-
-        <div class="card">
-            <h3>❤️ Safe Space</h3>
-            <p>A judgment-free environment designed for your recovery and well-being.</p>
-        </div>
-
-    </div>
-
-    <!-- Buttons -->
-    <div class="button-container">
-
-        <!-- IMPORTANT: correct routes -->
-        <a href="/app" class="btn primary">Enter as User</a>
-
-        <a href="/doctor-login" class="btn secondary">Doctor Login</a>
-
-    </div>
-
+    <a href="/user-login"><button>Patient Login</button></a>
+    <a href="/doctor-login"><button>Doctor Login</button></a>
+  </div>
 </div>
 
 </body>
